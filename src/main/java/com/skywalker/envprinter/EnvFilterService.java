@@ -10,10 +10,19 @@ import java.util.Set;
 import java.util.TreeMap;
 import java.util.stream.Collectors;
 
+/**
+ * Service for filtering and retrieving environment variables based on configuration.
+ * When project-only mode is enabled, scans the entire project to identify which
+ * environment variables are actually used.
+ */
 public class EnvFilterService {
 
     private static final Logger logger = LoggerFactory.getLogger(EnvFilterService.class);
 
+    /**
+     * Hardcoded list of common OS-specific environment variables to always exclude.
+     * These are system/OS variables that are rarely relevant to application debugging.
+     */
     private static final Set<String> HARDCODED_OS_EXCLUSIONS = new HashSet<>(Arrays.asList(
             // Windows-specific
             "ALLUSERSPROFILE", "APPDATA", "CommonProgramFiles", "CommonProgramFiles(x86)",
@@ -50,6 +59,11 @@ public class EnvFilterService {
         this.scanner = scanner;
     }
 
+    /**
+     * Gets filtered environment variables based on configuration.
+     * 
+     * @return filtered and sorted map of environment variables
+     */
     public Map<String, String> getFilteredEnvironment() {
         Map<String, String> allEnv = System.getenv();
         
@@ -60,6 +74,10 @@ public class EnvFilterService {
         }
     }
 
+    /**
+     * Filters environment variables to show only those actually used in the project.
+     * Scans configuration files and source code to identify referenced variables.
+     */
     private Map<String, String> filterProjectOnly(Map<String, String> env) {
         // Scan for used variables (cache the result for performance)
         if (cachedUsedVars == null) {
@@ -88,17 +106,23 @@ public class EnvFilterService {
         
         final Set<String> usedVars = cachedUsedVars;
         
-        return env.entrySet().stream()
-                .filter(entry -> usedVars.contains(entry.getKey()))
-                .filter(entry -> !isHardcodedOsExclusion(entry.getKey()))
-                .collect(Collectors.toMap(
-                        Map.Entry::getKey,
-                        Map.Entry::getValue,
-                        (e1, e2) -> e1,
-                        TreeMap::new
-                ));
+        // Build result map including both set and unset variables
+        Map<String, String> result = new TreeMap<>();
+        
+        // Add all detected variables (set or not set)
+        for (String varName : usedVars) {
+            if (!isHardcodedOsExclusion(varName)) {
+                // Get value from environment, or use null if not set
+                result.put(varName, env.get(varName));
+            }
+        }
+        
+        return result;
     }
 
+    /**
+     * Filters out hardcoded OS-specific environment variables.
+     */
     private Map<String, String> filterExcluded(Map<String, String> env) {
         return env.entrySet().stream()
                 .filter(entry -> !isHardcodedOsExclusion(entry.getKey()))
@@ -110,6 +134,9 @@ public class EnvFilterService {
                 ));
     }
 
+    /**
+     * Checks if an environment variable is in the hardcoded OS exclusion list.
+     */
     private boolean isHardcodedOsExclusion(String key) {
         // Exact match
         if (HARDCODED_OS_EXCLUSIONS.contains(key)) {
