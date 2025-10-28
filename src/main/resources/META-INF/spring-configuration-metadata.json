@@ -1,0 +1,26 @@
+{
+  "groups": [
+    {
+      "name": "env.printer",
+      "type": "com.skywalker.envprinter.EnvPrinterProperties",
+      "sourceType": "com.skywalker.envprinter.EnvPrinterProperties",
+      "description": "Configuration properties for the Environment Printer starter."
+    }
+  ],
+  "properties": [
+    {
+      "name": "env.printer.enabled",
+      "type": "java.lang.Boolean",
+      "sourceType": "com.skywalker.envprinter.EnvPrinterProperties",
+      "description": "Enable or disable the environment printer functionality. When disabled, no environment variables will be printed at startup and the actuator endpoint will not be available.",
+      "defaultValue": true
+    },
+    {
+      "name": "env.printer.endpoint-enabled",
+      "type": "java.lang.Boolean",
+      "sourceType": "com.skywalker.envprinter.EnvPrinterProperties",
+      "description": "Enable or disable the actuator endpoint for environment variables. When disabled, only startup logging will occur.",
+      "defaultValue": true
+    }
+  ]
+}

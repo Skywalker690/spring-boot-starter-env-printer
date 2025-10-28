@@ -2,16 +2,16 @@ package com.skywalker.envprinter;
 
 import org.springframework.boot.actuate.endpoint.annotation.Endpoint;
 import org.springframework.boot.actuate.endpoint.annotation.ReadOperation;
-import org.springframework.stereotype.Component;
 
 import java.util.Map;
+import java.util.TreeMap;
 
-@Component
-@Endpoint(id = "env-printer")
+@Endpoint(id = "envprinter")
 public class EnvPrinterEndpoint {
 
     @ReadOperation
     public Map<String, String> getEnvironment() {
-        return System.getenv();
+        // Return sorted environment variables for consistent ordering
+        return new TreeMap<>(System.getenv());
     }
 }
