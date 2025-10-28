@@ -218,6 +218,8 @@ Check logs to verify all required variables are set.
 ## 🔒 Security Note
 
 Be careful when exposing environment variables via HTTP endpoints in production. Consider:
+Note: If using Spring Security don't forget about SecurityConfig to permit endpoint 
+
 - Using `project-only=true` to limit exposure
 - Securing endpoints with authentication
 - Disabling in production with `env.printer.enabled=false`
@@ -251,4 +253,4 @@ MIT
 ---
 
 **Author:** Sanjo (Skywalker)  
-**Repository:** [spring-boot-starter-env-printer](https://github.com/Skywalker690/spring-boot-starter-env-printer1)
+**Repository:** [spring-boot-starter-env-printer](https://github.com/Skywalker690/spring-boot-starter-env-printer)
