@@ -12,15 +12,34 @@
       "name": "env.printer.enabled",
       "type": "java.lang.Boolean",
       "sourceType": "com.skywalker.envprinter.EnvPrinterProperties",
-      "description": "Enable or disable the environment printer functionality. When disabled, no environment variables will be printed at startup and the actuator endpoint will not be available.",
+      "description": "Enable or disable the environment printer functionality. When disabled, no environment variables will be printed at startup and the endpoint will not be available.",
       "defaultValue": true
     },
     {
       "name": "env.printer.endpoint-enabled",
       "type": "java.lang.Boolean",
       "sourceType": "com.skywalker.envprinter.EnvPrinterProperties",
-      "description": "Enable or disable the actuator endpoint for environment variables. When disabled, only startup logging will occur.",
+      "description": "Enable or disable the HTTP endpoint for environment variables. When disabled, only startup logging will occur.",
       "defaultValue": true
+    },
+    {
+      "name": "env.printer.project-only",
+      "type": "java.lang.Boolean",
+      "sourceType": "com.skywalker.envprinter.EnvPrinterProperties",
+      "description": "Filter to show only project-related environment variables. When enabled, filters out common OS and system environment variables.",
+      "defaultValue": false
+    },
+    {
+      "name": "env.printer.exclude-prefixes",
+      "type": "java.util.List<java.lang.String>",
+      "sourceType": "com.skywalker.envprinter.EnvPrinterProperties",
+      "description": "List of environment variable prefixes to exclude from output. Useful for hiding OS-specific or unwanted environment variables."
+    },
+    {
+      "name": "env.printer.include-patterns",
+      "type": "java.util.List<java.lang.String>",
+      "sourceType": "com.skywalker.envprinter.EnvPrinterProperties",
+      "description": "List of environment variable name patterns to include when project-only is enabled. These are common project-related environment variables."
     }
   ]
 }

@@ -5,11 +5,15 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.util.Map;
-import java.util.TreeMap;
 
 public class EnvPrinter {
 
     private static final Logger logger = LoggerFactory.getLogger(EnvPrinter.class);
+    private final EnvFilterService filterService;
+
+    public EnvPrinter(EnvFilterService filterService) {
+        this.filterService = filterService;
+    }
 
     @PostConstruct
     public void printEnv() {
@@ -17,9 +21,8 @@ public class EnvPrinter {
         logger.info("🌍 Environment Variables");
         logger.info("===============================");
         
-        // Sort environment variables for better readability
-        Map<String, String> sortedEnv = new TreeMap<>(System.getenv());
-        for (Map.Entry<String, String> entry : sortedEnv.entrySet()) {
+        Map<String, String> filteredEnv = filterService.getFilteredEnvironment();
+        for (Map.Entry<String, String> entry : filteredEnv.entrySet()) {
             logger.info("{} = {}", entry.getKey(), entry.getValue());
         }
         logger.info("===============================");
