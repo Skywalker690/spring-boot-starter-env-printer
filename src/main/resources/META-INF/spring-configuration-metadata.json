@@ -26,20 +26,8 @@
       "name": "env.printer.project-only",
       "type": "java.lang.Boolean",
       "sourceType": "com.skywalker.envprinter.EnvPrinterProperties",
-      "description": "Filter to show only project-related environment variables. When enabled, filters out common OS and system environment variables.",
+      "description": "Filter to show only environment variables actually used in the project. When enabled, scans configuration files (application.properties, application.yml) and source code to identify which environment variables are referenced, and displays only those variables.",
       "defaultValue": false
-    },
-    {
-      "name": "env.printer.exclude-prefixes",
-      "type": "java.util.List<java.lang.String>",
-      "sourceType": "com.skywalker.envprinter.EnvPrinterProperties",
-      "description": "List of environment variable prefixes to exclude from output. Useful for hiding OS-specific or unwanted environment variables."
-    },
-    {
-      "name": "env.printer.include-patterns",
-      "type": "java.util.List<java.lang.String>",
-      "sourceType": "com.skywalker.envprinter.EnvPrinterProperties",
-      "description": "List of environment variable name patterns to include when project-only is enabled. These are common project-related environment variables."
     }
   ]
 }

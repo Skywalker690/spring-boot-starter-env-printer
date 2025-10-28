@@ -13,8 +13,13 @@ import org.springframework.context.annotation.Bean;
 public class EnvPrinterAutoConfiguration {
 
     @Bean
-    public EnvFilterService envFilterService(EnvPrinterProperties properties) {
-        return new EnvFilterService(properties);
+    public EnvUsageScanner envUsageScanner() {
+        return new EnvUsageScanner();
+    }
+
+    @Bean
+    public EnvFilterService envFilterService(EnvPrinterProperties properties, EnvUsageScanner scanner) {
+        return new EnvFilterService(properties, scanner);
     }
 
     @Bean
