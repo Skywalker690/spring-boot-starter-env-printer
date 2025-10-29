@@ -28,7 +28,7 @@ public class EnvPrinterProperties {
      * and source code to identify which environment variables are referenced,
      * and displays only those variables.
      */
-    private boolean projectOnly = false;
+    private boolean projectOnly = true;
 
     /**
      * Control whether to display environment variable values or just names.
