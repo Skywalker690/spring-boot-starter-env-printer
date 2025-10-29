@@ -8,7 +8,7 @@ Thank you for your interest in contributing to Spring Boot Starter Env Printer! 
 
 If you find a bug or have a suggestion for improvement:
 
-1. Check if the issue already exists in the [Issues](https://github.com/Skywalker690/spring-boot-starter-env-printer1/issues) section
+1. Check if the issue already exists in the [Issues](https://github.com/Skywalker690/spring-boot-starter-env-printer/issues) section
 2. If not, create a new issue with:
    - A clear, descriptive title
    - Detailed description of the problem or suggestion
@@ -59,8 +59,8 @@ If you find a bug or have a suggestion for improvement:
 
 ```bash
 # Clone the repository
-git clone https://github.com/Skywalker690/spring-boot-starter-env-printer1.git
-cd spring-boot-starter-env-printer1
+git clone https://github.com/Skywalker690/spring-boot-starter-env-printer.git
+cd spring-boot-starter-env-printer
 
 # Build the project
 mvn clean install
