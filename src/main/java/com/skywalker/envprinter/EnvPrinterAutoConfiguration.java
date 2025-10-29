@@ -44,11 +44,12 @@ public class EnvPrinterAutoConfiguration {
      * Creates the EnvPrinter bean that logs environment variables at startup.
      *
      * @param filterService the filter service
+     * @param properties the configuration properties
      * @return the EnvPrinter instance
      */
     @Bean
-    public EnvPrinter envPrinter(EnvFilterService filterService) {
-        return new EnvPrinter(filterService);
+    public EnvPrinter envPrinter(EnvFilterService filterService, EnvPrinterProperties properties) {
+        return new EnvPrinter(filterService, properties);
     }
 
     /**

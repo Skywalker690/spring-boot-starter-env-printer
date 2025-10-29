@@ -14,9 +14,11 @@ public class EnvPrinter {
 
     private static final Logger logger = LoggerFactory.getLogger(EnvPrinter.class);
     private final EnvFilterService filterService;
+    private final EnvPrinterProperties properties;
 
-    public EnvPrinter(EnvFilterService filterService) {
+    public EnvPrinter(EnvFilterService filterService, EnvPrinterProperties properties) {
         this.filterService = filterService;
+        this.properties = properties;
     }
 
     @PostConstruct
@@ -26,10 +28,21 @@ public class EnvPrinter {
         logger.info("===============================");
         
         Map<String, String> filteredEnv = filterService.getFilteredEnvironment();
-        for (Map.Entry<String, String> entry : filteredEnv.entrySet()) {
-            logger.info("{} = {}", entry.getKey(), entry.getValue());
+        
+        if (properties.isShowValues()) {
+            // Show both name and value
+            for (Map.Entry<String, String> entry : filteredEnv.entrySet()) {
+                logger.info("{} = {}", entry.getKey(), entry.getValue());
+            }
+        } else {
+            // Show only names
+            for (String key : filteredEnv.keySet()) {
+                logger.info("{}", key);
+            }
         }
         logger.info("===============================");
         logger.info("===============================");
+
+
     }
 }

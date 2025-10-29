@@ -75,6 +75,29 @@ public class EnvFilterService {
     }
 
     /**
+     * Gets filtered environment variables for API/endpoint response.
+     * Returns only names if showValues is false, otherwise returns name-value pairs.
+     * 
+     * @return filtered and sorted map of environment variables (value may be empty string if showValues is false)
+     */
+    public Map<String, String> getFilteredEnvironmentForEndpoint() {
+        Map<String, String> filteredEnv = getFilteredEnvironment();
+        
+        if (!properties.isShowValues()) {
+            // Return map with empty string values (just showing keys)
+            return filteredEnv.keySet().stream()
+                    .collect(Collectors.toMap(
+                            key -> key,
+                            key -> "",
+                            (e1, e2) -> e1,
+                            TreeMap::new
+                    ));
+        }
+        
+        return filteredEnv;
+    }
+
+    /**
      * Filters environment variables to show only those actually used in the project.
      * Scans configuration files and source code to identify referenced variables.
      */
@@ -84,23 +107,31 @@ public class EnvFilterService {
             logger.info("Scanning project for environment variable usage...");
             cachedUsedVars = scanner.scanForUsedEnvVariables();
             
-            // Log the detected environment variables with their values
+            // Log the detected environment variables
             if (cachedUsedVars.isEmpty()) {
                 logger.info("No environment variables detected in project");
             } else {
-                // Build a formatted string with name=value pairs
-                String detectedVarsWithValues = cachedUsedVars.stream()
-                        .sorted()
-                        .map(varName -> {
-                            String value = env.get(varName);
-                            if (value != null) {
-                                return varName + "=" + value;
-                            } else {
-                                return varName + "=<not set>";
-                            }
-                        })
-                        .collect(Collectors.joining(", "));
-                logger.info("Detected environment variables: {}", detectedVarsWithValues);
+                if (properties.isShowValues()) {
+                    // Build a formatted string with name=value pairs
+                    String detectedVarsWithValues = cachedUsedVars.stream()
+                            .sorted()
+                            .map(varName -> {
+                                String value = env.get(varName);
+                                if (value != null) {
+                                    return varName + "=" + value;
+                                } else {
+                                    return varName + "=<not set>";
+                                }
+                            })
+                            .collect(Collectors.joining(", "));
+                    logger.info("Detected environment variables: {}", detectedVarsWithValues);
+                } else {
+                    // Show only names
+                    String detectedVarNames = cachedUsedVars.stream()
+                            .sorted()
+                            .collect(Collectors.joining(", "));
+                    logger.info("Detected environment variables: {}", detectedVarNames);
+                }
             }
         }
         

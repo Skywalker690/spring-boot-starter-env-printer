@@ -31,11 +31,12 @@ public class EnvPrinterController {
      * Returns filtered environment variables as a sorted map.
      * The variables are sorted alphabetically by key for better readability.
      * Filtering is based on the configuration properties.
+     * When showValues is false, only variable names are returned (with empty string values).
      *
-     * @return a map of environment variable names to their values
+     * @return a map of environment variable names to their values (or empty strings if showValues is false)
      */
     @GetMapping("/env-printer")
     public Map<String, String> getEnvironment() {
-        return filterService.getFilteredEnvironment();
+        return filterService.getFilteredEnvironmentForEndpoint();
     }
 }

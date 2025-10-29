@@ -30,6 +30,13 @@ public class EnvPrinterProperties {
      */
     private boolean projectOnly = false;
 
+    /**
+     * Control whether to display environment variable values or just names.
+     * When false (default), only environment variable names are shown in logs and endpoints.
+     * When true, both names and values are displayed.
+     */
+    private boolean showValues = false;
+
     public boolean isEnabled() {
         return enabled;
     }
@@ -52,5 +59,13 @@ public class EnvPrinterProperties {
 
     public void setProjectOnly(boolean projectOnly) {
         this.projectOnly = projectOnly;
+    }
+
+    public boolean isShowValues() {
+        return showValues;
+    }
+
+    public void setShowValues(boolean showValues) {
+        this.showValues = showValues;
     }
 }
