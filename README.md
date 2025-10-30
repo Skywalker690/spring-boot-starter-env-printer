@@ -22,26 +22,9 @@ This starter is useful for developers who deploy applications across multiple en
 
 ```xml
 <dependency>
-  <groupId>com.skywalker</groupId>
-  <artifactId>spring-boot-starter-env-printer</artifactId>
-  <version>1.0.0</version>
-</dependency>
-```
-
-Or from GitHub via JitPack:
-
-```xml
-<repositories>
-  <repository>
-    <id>jitpack.io</id>
-    <url>https://jitpack.io</url>
-  </repository>
-</repositories>
-
-<dependency>
-  <groupId>com.github.Skywalker690</groupId>
-  <artifactId>spring-boot-starter-env-printer</artifactId>
-  <version>1.0.0</version>
+    <groupId>io.github.skywalker690</groupId>
+    <artifactId>spring-boot-starter-env-printer</artifactId>
+    <version>1.0.0</version>
 </dependency>
 ```
 
@@ -129,7 +112,10 @@ env.printer.endpoint-enabled=true
 # Show only variables actually used in project
 env.printer.project-only=true
 
-spring.application.name=my-awesome-app
+# Show env values
+env.printer.show-values=true
+
+spring.application.name=my-spring-app
 ```
 
 **YAML Configuration:**
@@ -139,6 +125,8 @@ env:
     enabled: true
     endpoint-enabled: true
     project-only: true
+    show-values: false
+
 ```
 
 ## 🛠️ Configuration Properties Reference
@@ -147,7 +135,9 @@ env:
 |----------|------|---------|-------------|
 | `env.printer.enabled` | Boolean | `true` | Enable/disable the environment printer. When disabled, no environment variables will be printed at startup and the endpoint will not be available. |
 | `env.printer.endpoint-enabled` | Boolean | `true` | Enable/disable the HTTP endpoint for environment variables. When disabled, only startup logging will occur. |
-| `env.printer.project-only` | Boolean | `false` | Scan project files to show only environment variables actually referenced in configuration files and source code. When enabled, provides the most relevant view of your application's environment. |
+| `env.printer.project-only` | Boolean | `true` | Scan project files to show only environment variables actually referenced in configuration files and source code. When enabled, provides the most relevant view of your application's environment. |
+| `env.printer.show-values` | Boolean | `false` | Controls whether actual values of environment variables are displayed. When disabled, only variable names are shown to protect sensitive information. |
+
 
 ## 📊 Endpoints
 
