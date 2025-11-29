@@ -1,4 +1,5 @@
 # 🌍 Spring Boot Starter Env Printer
+[![Maven Central](https://img.shields.io/maven-central/v/io.github.skywalker690/spring-boot-starter-env-printer.svg?label=Maven%20Central)](https://search.maven.org/artifact/io.github.skywalker690/spring-boot-starter-env-printer)
 
 A lightweight custom Spring Boot starter designed to automatically print environment variables at application startup — and optionally expose them via HTTP endpoint for easier debugging and configuration visibility.
 
@@ -236,11 +237,6 @@ When `project-only=true`:
 
 **Performance:** Scanning happens once at startup and results are cached.
 
-## 📄 License
 
-MIT
-
----
-
-**Author:** Sanjo (Skywalker)  
-**Repository:** [spring-boot-starter-env-printer](https://github.com/Skywalker690/spring-boot-starter-env-printer)
+**Author:** Sanjo (Skywalker690)  
+**Repository:** [spring-boot-starter-env-printer](https://repo1.maven.org/maven2/io/github/skywalker690/spring-boot-starter-env-printer/1.0.0)
