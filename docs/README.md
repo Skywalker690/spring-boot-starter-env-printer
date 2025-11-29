@@ -20,36 +20,12 @@ Add the dependency to your `pom.xml`:
 
 ```xml
 <dependency>
-    <groupId>com.skywalker</groupId>
+    <groupId>io.github.skywalker690</groupId>
     <artifactId>spring-boot-starter-env-printer</artifactId>
     <version>1.0.0</version>
 </dependency>
 ```
 
-### Gradle
-
-```gradle
-implementation 'com.skywalker:spring-boot-starter-env-printer:1.0.0'
-```
-
-### JitPack (Alternative)
-
-Add JitPack repository:
-
-```xml
-<repositories>
-    <repository>
-        <id>jitpack.io</id>
-        <url>https://jitpack.io</url>
-    </repository>
-</repositories>
-
-<dependency>
-    <groupId>com.github.Skywalker690</groupId>
-    <artifactId>spring-boot-starter-env-printer</artifactId>
-    <version>1.0.0</version>
-</dependency>
-```
 
 ## Quick Start
 
@@ -142,6 +118,8 @@ Two endpoints are available for accessing environment variables via HTTP:
 
 Note: Variables with `null` values are detected in your project but not set in the environment.
 
+
+
 ### 4. OS-Specific Variable Filtering
 
 Automatically excludes 50+ common OS-specific environment variables:
@@ -153,6 +131,24 @@ Automatically excludes 50+ common OS-specific environment variables:
 - DISPLAY, XDG_*, SHELL, TERM, locale variables, etc.
 
 This filtering is hardcoded and cannot be disabled.
+
+## 🚫 Hardcoded OS Exclusions
+
+The following OS-specific environment variables are automatically hidden (not configurable):
+
+### Windows
+- `APPDATA`, `CommonProgramFiles`, `HOMEDRIVE`, `HOMEPATH`
+- `LOCALAPPDATA`, `ProgramData`, `ProgramFiles`, `PUBLIC`
+- `SystemDrive`, `SystemRoot`, `TEMP`, `TMP`, `windir`
+- `OneDrive`, `PROCESSOR_*`, `NUMBER_OF_PROCESSORS`
+- `OS`, `PATHEXT`, `PROMPT`, `PSModulePath`, `USERDOMAIN`
+
+### Linux/Unix
+- `DISPLAY`, `SESSION_MANAGER`, `XDG_*` variables
+- `SHELL`, `TERM`, `COLORTERM`, `SHLVL`
+- Locale variables: `LANG`, `LANGUAGE`, `LC_*`
+
+These exclusions keep the output focused on application-relevant variables.
 
 ### 5. Variable Name Trimming
 
@@ -244,14 +240,6 @@ Or disable only the endpoint:
 env.printer.endpoint-enabled=false
 ```
 
-### Example 4: CI/CD Verification
-
-Use in CI/CD to verify environment setup:
-
-```bash
-# Start application and check logs
-java -jar myapp.jar | grep "Detected environment variables"
-```
 
 ## Troubleshooting
 
