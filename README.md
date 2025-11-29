@@ -160,24 +160,6 @@ env:
 - **Response**: JSON map of filtered environment variables
 - **Note**: Requires actuator endpoints to be exposed
 
-## 🚫 Hardcoded OS Exclusions
-
-The following OS-specific environment variables are automatically hidden (not configurable):
-
-### Windows
-- `APPDATA`, `CommonProgramFiles`, `HOMEDRIVE`, `HOMEPATH`
-- `LOCALAPPDATA`, `ProgramData`, `ProgramFiles`, `PUBLIC`
-- `SystemDrive`, `SystemRoot`, `TEMP`, `TMP`, `windir`
-- `OneDrive`, `PROCESSOR_*`, `NUMBER_OF_PROCESSORS`
-- `OS`, `PATHEXT`, `PROMPT`, `PSModulePath`, `USERDOMAIN`
-
-### Linux/Unix
-- `DISPLAY`, `SESSION_MANAGER`, `XDG_*` variables
-- `SHELL`, `TERM`, `COLORTERM`, `SHLVL`
-- Locale variables: `LANG`, `LANGUAGE`, `LC_*`
-
-These exclusions keep the output focused on application-relevant variables.
-
 ## 📋 Requirements
 
 - Java 17 or higher
