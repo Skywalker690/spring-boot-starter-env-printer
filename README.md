@@ -224,6 +224,25 @@ When `project-only=true`:
 
 **Performance:** Scanning happens once at startup and results are cached.
 
+---
 
-**Author:** Sanjo (Skywalker690)  
-**Repository:** [spring-boot-starter-env-printer](https://repo1.maven.org/maven2/io/github/skywalker690/spring-boot-starter-env-printer/1.0.0)
+## 📄 License
+This project is licensed under the **MIT License** — see the [LICENSE](LICENSE) file for details.
+
+## 🤝 Contributing
+Contributions, issues, and feature requests are welcome!  
+Check out the [CONTRIBUTING.md](CONTRIBUTING.md) file and feel free to submit a PR.
+
+## ⭐ Show Your Support
+If you find this starter useful, please **star** the repository to help others discover it!
+👉 https://github.com/Skywalker690/spring-boot-starter-env-printer
+
+## 🔍 Useful Links
+- 📦 Maven Central: https://search.maven.org/artifact/io.github.skywalker690/spring-boot-starter-env-printer
+- 🧑‍💻 GitHub Repo: https://github.com/Skywalker690/spring-boot-starter-env-printer
+- 📝 Issue Tracker: https://github.com/Skywalker690/spring-boot-starter-env-printer/issues
+
+---
+
+**Author:** Sanjo (Skywalker690)
+
