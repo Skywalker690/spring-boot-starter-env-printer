@@ -1,5 +1,7 @@
 # 🌍 Spring Boot Starter Env Printer
-[![Maven Central](https://img.shields.io/maven-central/v/io.github.skywalker690/spring-boot-starter-env-printer.svg?label=Maven%20Central)](https://search.maven.org/artifact/io.github.skywalker690/spring-boot-starter-env-printer)
+
+[![Maven Central](https://img.shields.io/maven-central/v/io.github.skywalker690/spring-boot-starter-env-printer)](https://central.sonatype.com/artifact/io.github.skywalker690/spring-boot-starter-env-printer)
+[![GitHub Release](https://img.shields.io/github/v/release/Skywalker690/spring-boot-starter-env-printer)](https://github.com/Skywalker690/spring-boot-starter-env-printer/releases)
 [![Java Version](https://img.shields.io/badge/Java-17%2B-blue.svg)]()
 [![Spring Boot](https://img.shields.io/badge/Spring%20Boot-3.2%2B-brightgreen.svg)]()
 [![License](https://img.shields.io/badge/License-MIT-green.svg)](LICENSE)
