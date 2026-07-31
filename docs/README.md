@@ -26,6 +26,7 @@ Add the dependency to your `pom.xml`:
 </dependency>
 ```
 
+<<<<<<< HEAD
 ### Gradle
 
 ```gradle
@@ -50,6 +51,8 @@ Add JitPack repository:
     <version>2.0.0</version>
 </dependency>
 ```
+=======
+>>>>>>> 6d8366b3c73d369d17a2119b79a134bbd31c2143
 
 ## Quick Start
 
@@ -141,6 +144,8 @@ Two endpoints are available for accessing environment variables via HTTP:
 
 Note: Variables with `null` values are detected in your project but not set in the environment.
 
+
+
 ### 4. OS-Specific Variable Filtering
 
 Automatically excludes 50+ common OS-specific environment variables:
@@ -152,6 +157,24 @@ Automatically excludes 50+ common OS-specific environment variables:
 - DISPLAY, XDG_*, SHELL, TERM, locale variables, etc.
 
 This filtering is hardcoded and cannot be disabled.
+
+## 🚫 Hardcoded OS Exclusions
+
+The following OS-specific environment variables are automatically hidden (not configurable):
+
+### Windows
+- `APPDATA`, `CommonProgramFiles`, `HOMEDRIVE`, `HOMEPATH`
+- `LOCALAPPDATA`, `ProgramData`, `ProgramFiles`, `PUBLIC`
+- `SystemDrive`, `SystemRoot`, `TEMP`, `TMP`, `windir`
+- `OneDrive`, `PROCESSOR_*`, `NUMBER_OF_PROCESSORS`
+- `OS`, `PATHEXT`, `PROMPT`, `PSModulePath`, `USERDOMAIN`
+
+### Linux/Unix
+- `DISPLAY`, `SESSION_MANAGER`, `XDG_*` variables
+- `SHELL`, `TERM`, `COLORTERM`, `SHLVL`
+- Locale variables: `LANG`, `LANGUAGE`, `LC_*`
+
+These exclusions keep the output focused on application-relevant variables.
 
 ### 5. Variable Name Trimming
 
@@ -243,14 +266,6 @@ Or disable only the endpoint:
 env.printer.endpoint-enabled=false
 ```
 
-### Example 4: CI/CD Verification
-
-Use in CI/CD to verify environment setup:
-
-```bash
-# Start application and check logs
-java -jar myapp.jar | grep "Detected environment variables"
-```
 
 ## Troubleshooting
 

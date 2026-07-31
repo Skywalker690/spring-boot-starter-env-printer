@@ -1,5 +1,13 @@
 # 🌍 Spring Boot Starter Env Printer
 
+[![Maven Central](https://img.shields.io/maven-central/v/io.github.skywalker690/spring-boot-starter-env-printer)](https://central.sonatype.com/artifact/io.github.skywalker690/spring-boot-starter-env-printer)
+[![GitHub Release](https://img.shields.io/github/v/release/Skywalker690/spring-boot-starter-env-printer)](https://github.com/Skywalker690/spring-boot-starter-env-printer/releases)
+[![Java Version](https://img.shields.io/badge/Java-17%2B-blue.svg)]()
+[![Spring Boot](https://img.shields.io/badge/Spring%20Boot-3.2%2B-brightgreen.svg)]()
+[![License](https://img.shields.io/badge/License-MIT-green.svg)](LICENSE)
+[![PRs Welcome](https://img.shields.io/badge/PRs-Welcome-blueviolet.svg)](CONTRIBUTING.md)
+[![Stars](https://img.shields.io/github/stars/Skywalker690/spring-boot-starter-env-printer?style=social)](https://github.com/Skywalker690/spring-boot-starter-env-printer/stargazers)
+
 A lightweight custom Spring Boot starter designed to automatically print environment variables at application startup — and optionally expose them via HTTP endpoint for easier debugging and configuration visibility.
 
 This starter is useful for developers who deploy applications across multiple environments (like local, staging, or production) and need quick insight into what environment variables are available during runtime — without manually logging or debugging them.
@@ -22,9 +30,9 @@ This starter is useful for developers who deploy applications across multiple en
 
 ```xml
 <dependency>
-  <groupId>io.github.skywalker690</groupId>
+  <groupId>com.skywalker</groupId>
   <artifactId>spring-boot-starter-env-printer</artifactId>
-  <version>2.0.0</version>
+  <version>1.0.0</version>
 </dependency>
 ```
 
@@ -41,7 +49,7 @@ Or from GitHub via JitPack:
 <dependency>
   <groupId>com.github.Skywalker690</groupId>
   <artifactId>spring-boot-starter-env-printer</artifactId>
-  <version>2.0.0</version>
+  <version>1.0.0</version>
 </dependency>
 ```
 
@@ -128,7 +136,10 @@ env.printer.endpoint-enabled=true
 # Show only variables actually used in project
 env.printer.project-only=true
 
-spring.application.name=my-awesome-app
+# Show env values
+env.printer.show-values=true
+
+spring.application.name=my-spring-app
 ```
 
 **YAML Configuration:**
@@ -138,6 +149,8 @@ env:
     enabled: true
     endpoint-enabled: true
     project-only: true
+    show-values: false
+
 ```
 
 ## 🛠️ Configuration Properties Reference
@@ -145,8 +158,8 @@ env:
 | Property | Type | Default | Description |
 |----------|------|---------|-------------|
 | `env.printer.enabled` | Boolean | `true` | Enable/disable the environment printer. When disabled, no environment variables will be printed at startup and the endpoint will not be available. |
-| `env.printer.endpoint-enabled` | Boolean | `false` | Enable/disable the HTTP endpoint for environment variables. Disabled by default to avoid exposing configuration metadata. |
-| `env.printer.project-only` | Boolean | `true` | Scan project files to show only environment variables actually referenced in configuration files and compiled classes. |
+| `env.printer.endpoint-enabled` | Boolean | `true` | Enable/disable the HTTP endpoint for environment variables. When disabled, only startup logging will occur. |
+| `env.printer.project-only` | Boolean | `false` | Scan project files to show only environment variables actually referenced in configuration files and source code. When enabled, provides the most relevant view of your application's environment. |
 
 ## 📊 Endpoints
 
@@ -162,24 +175,6 @@ env:
 - **Access**: `GET http://localhost:8080/actuator/envprinter`
 - **Response**: JSON map of filtered environment variables
 - **Note**: Requires actuator endpoints to be exposed
-
-## 🚫 Hardcoded OS Exclusions
-
-The following OS-specific environment variables are automatically hidden (not configurable):
-
-### Windows
-- `APPDATA`, `CommonProgramFiles`, `HOMEDRIVE`, `HOMEPATH`
-- `LOCALAPPDATA`, `ProgramData`, `ProgramFiles`, `PUBLIC`
-- `SystemDrive`, `SystemRoot`, `TEMP`, `TMP`, `windir`
-- `OneDrive`, `PROCESSOR_*`, `NUMBER_OF_PROCESSORS`
-- `OS`, `PATHEXT`, `PROMPT`, `PSModulePath`, `USERDOMAIN`
-
-### Linux/Unix
-- `DISPLAY`, `SESSION_MANAGER`, `XDG_*` variables
-- `SHELL`, `TERM`, `COLORTERM`, `SHLVL`
-- Locale variables: `LANG`, `LANGUAGE`, `LC_*`
-
-These exclusions keep the output focused on application-relevant variables.
 
 ## 📋 Requirements
 
@@ -245,9 +240,11 @@ When `project-only=true`:
 
 **Performance:** Scanning happens once at startup and results are cached.
 
+---
+
 ## 📄 License
 
-Apache License 2.0
+MIT
 
 ---
 
