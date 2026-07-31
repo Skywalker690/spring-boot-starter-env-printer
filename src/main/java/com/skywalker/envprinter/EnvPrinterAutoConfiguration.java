@@ -61,7 +61,8 @@ public class EnvPrinterAutoConfiguration {
      */
     @Bean
     @ConditionalOnWebApplication
-    @ConditionalOnProperty(prefix = "env.printer", name = "endpoint-enabled", havingValue = "true", matchIfMissing = true)
+    @ConditionalOnClass(name = "org.springframework.web.bind.annotation.RestController")
+    @ConditionalOnProperty(prefix = "env.printer", name = "endpoint-enabled", havingValue = "true", matchIfMissing = false)
     public EnvPrinterController envPrinterController(EnvFilterService filterService) {
         return new EnvPrinterController(filterService);
     }
@@ -75,7 +76,7 @@ public class EnvPrinterAutoConfiguration {
      */
     @Bean
     @ConditionalOnClass(name = "org.springframework.boot.actuate.endpoint.annotation.Endpoint")
-    @ConditionalOnProperty(prefix = "env.printer", name = "endpoint-enabled", havingValue = "true", matchIfMissing = true)
+    @ConditionalOnProperty(prefix = "env.printer", name = "endpoint-enabled", havingValue = "true", matchIfMissing = false)
     public EnvPrinterEndpoint envPrinterEndpoint(EnvFilterService filterService) {
         return new EnvPrinterEndpoint(filterService);
     }

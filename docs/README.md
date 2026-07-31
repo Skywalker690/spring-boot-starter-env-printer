@@ -20,7 +20,7 @@ Add the dependency to your `pom.xml`:
 
 ```xml
 <dependency>
-    <groupId>com.skywalker</groupId>
+    <groupId>io.github.skywalker690</groupId>
     <artifactId>spring-boot-starter-env-printer</artifactId>
     <version>1.0.0</version>
 </dependency>
@@ -75,8 +75,8 @@ All configuration properties use the prefix `env.printer`:
 | Property | Type | Default | Description |
 |----------|------|---------|-------------|
 | `env.printer.enabled` | Boolean | `true` | Enable or disable the env printer |
-| `env.printer.endpoint-enabled` | Boolean | `true` | Enable or disable the HTTP endpoint |
-| `env.printer.project-only` | Boolean | `false` | Show only variables used in project |
+| `env.printer.endpoint-enabled` | Boolean | `false` | Enable or disable the HTTP endpoint |
+| `env.printer.project-only` | Boolean | `true` | Show only variables used in project |
 
 ### Example Configuration
 
@@ -108,8 +108,7 @@ When enabled, scans your project files to identify which environment variables a
 
 - Scans `application.properties` and `application.yml`
 - Detects `${ENV_VAR}` placeholders
-- Detects `@Value("${ENV_VAR}")` annotations
-- Detects `System.getenv("VAR")` calls
+- Detects `@Value("${ENV_VAR}")` annotations and environment-variable literals in compiled classes (best effort)
 
 **Configuration:**
 ```properties
@@ -170,7 +169,7 @@ Automatically trims common prefixes from variable names:
 @ConfigurationProperties(prefix = "env.printer")
 public class EnvPrinterProperties {
     private boolean enabled = true;
-    private boolean endpointEnabled = true;
+    private boolean endpointEnabled = false;
     private boolean projectOnly = false;
     
     // Getters and setters...
@@ -282,9 +281,9 @@ env.printer.project-only=true
 
 ## Support
 
-- **Issues:** [GitHub Issues](https://github.com/Skywalker690/spring-boot-starter-env-printer1/issues)
+- **Issues:** [GitHub Issues](https://github.com/Skywalker690/spring-boot-starter-env-printer/issues)
 - **Contributing:** See [CONTRIBUTING.md](../CONTRIBUTING.md)
-- **License:** MIT License - see [LICENSE](../LICENSE)
+- **License:** Apache License 2.0 - see [LICENSE](../LICENSE)
 
 ## Version History
 

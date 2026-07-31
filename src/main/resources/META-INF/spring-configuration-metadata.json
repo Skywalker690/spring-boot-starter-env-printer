@@ -19,15 +19,15 @@
       "name": "env.printer.endpoint-enabled",
       "type": "java.lang.Boolean",
       "sourceType": "com.skywalker.envprinter.EnvPrinterProperties",
-      "description": "Enable or disable the HTTP endpoint for environment variables. When disabled, only startup logging will occur.",
-      "defaultValue": true
+      "description": "Enable or disable the HTTP endpoint for environment variables. Disabled by default to avoid exposing configuration metadata.",
+      "defaultValue": false
     },
     {
       "name": "env.printer.project-only",
       "type": "java.lang.Boolean",
       "sourceType": "com.skywalker.envprinter.EnvPrinterProperties",
-      "description": "Filter to show only environment variables actually used in the project. When enabled, scans configuration files (application.properties, application.yml) and source code to identify which environment variables are referenced, and displays only those variables.",
-      "defaultValue": false
+      "description": "Filter to show only environment variables actually used in the project. When enabled, scans configuration files and compiled classes to identify referenced variables, and displays only those variables.",
+      "defaultValue": true
     }
   ]
 }

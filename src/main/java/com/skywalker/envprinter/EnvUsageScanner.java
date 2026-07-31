@@ -2,6 +2,11 @@ package com.skywalker.envprinter;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.asm.ClassReader;
+import org.springframework.asm.ClassVisitor;
+import org.springframework.asm.MethodVisitor;
+import org.springframework.asm.AnnotationVisitor;
+import org.springframework.asm.Opcodes;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.support.PathMatchingResourcePatternResolver;
 
@@ -49,8 +54,9 @@ public class EnvUsageScanner {
             scanConfigFiles("classpath*:application*.yml", usedVars);
             scanConfigFiles("classpath*:application*.yaml", usedVars);
             
-            // Scan Java source files (if available in classpath)
-            scanJavaFiles(usedVars);
+            // Scan compiled application classes. Source files are normally not available
+            // in a deployed application, so inspect class-file string constants instead.
+            scanClassFiles(usedVars);
             
             logger.debug("Found {} environment variables in use across the project", usedVars.size());
             
@@ -78,16 +84,81 @@ public class EnvUsageScanner {
     }
 
     /**
-     * Scans Java files for System.getenv() and @Value annotations.
+     * Scans compiled classes for System.getenv() calls and @Value annotations.
      */
-    private void scanJavaFiles(Set<String> usedVars) {
+    private void scanClassFiles(Set<String> usedVars) {
         try {
             Resource[] resources = resolver.getResources("classpath*:**/*.class");
-            // Note: Scanning compiled classes is limited. This is a best-effort approach.
-            // In a real deployment, source files might not be available.
-            logger.debug("Java class scanning is limited in compiled environment");
+            for (Resource resource : resources) {
+                if (resource.exists() && resource.isReadable()) {
+                    byte[] classBytes;
+                    try (var inputStream = resource.getInputStream()) {
+                        classBytes = inputStream.readAllBytes();
+                    }
+                    scanClass(classBytes, usedVars);
+                }
+            }
         } catch (IOException e) {
-            logger.debug("Could not scan Java files: {}", e.getMessage());
+            logger.debug("Could not scan compiled classes: {}", e.getMessage());
+        }
+    }
+
+    private void scanClass(byte[] classBytes, Set<String> usedVars) {
+        new ClassReader(classBytes).accept(new ClassVisitor(Opcodes.ASM9) {
+            @Override
+            public AnnotationVisitor visitAnnotation(String descriptor, boolean visible) {
+                if ("Lorg/springframework/beans/factory/annotation/Value;".equals(descriptor)) {
+                    return new AnnotationVisitor(Opcodes.ASM9) {
+                        @Override
+                        public void visit(String name, Object value) {
+                            if (value instanceof String stringValue) {
+                                addIfLikelyEnvVar(stringValue, usedVars);
+                            }
+                        }
+                    };
+                }
+                return null;
+            }
+
+            @Override
+            public MethodVisitor visitMethod(int access, String name, String descriptor,
+                                              String signature, String[] exceptions) {
+                return new MethodVisitor(Opcodes.ASM9) {
+                    private String lastStringConstant;
+
+                    @Override
+                    public void visitLdcInsn(Object value) {
+                        lastStringConstant = value instanceof String ? (String) value : null;
+                    }
+
+                    @Override
+                    public void visitMethodInsn(int opcode, String owner, String methodName,
+                                                String methodDescriptor, boolean isInterface) {
+                        if ("java/lang/System".equals(owner) && "getenv".equals(methodName)
+                                && lastStringConstant != null) {
+                            addIfLikelyEnvVar(lastStringConstant, usedVars);
+                        }
+                        lastStringConstant = null;
+                    }
+                };
+            }
+        }, ClassReader.SKIP_DEBUG | ClassReader.SKIP_FRAMES);
+    }
+
+    private void addIfLikelyEnvVar(String value, Set<String> usedVars) {
+        String varName = trimEnvVarName(value.trim());
+        if (isLikelyEnvVar(varName)) {
+            usedVars.add(varName);
+        }
+    }
+
+    private void extractMatches(String content, Pattern pattern, Set<String> usedVars) {
+        Matcher matcher = pattern.matcher(content);
+        while (matcher.find()) {
+            String varName = trimEnvVarName((matcher.groupCount() > 0 ? matcher.group(1) : matcher.group()).trim());
+            if (isLikelyEnvVar(varName)) {
+                usedVars.add(varName);
+            }
         }
     }
 

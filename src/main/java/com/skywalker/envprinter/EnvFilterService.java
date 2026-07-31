@@ -99,7 +99,7 @@ public class EnvFilterService {
 
     /**
      * Filters environment variables to show only those actually used in the project.
-     * Scans configuration files and source code to identify referenced variables.
+     * Scans configuration files and compiled classes to identify referenced variables.
      */
     private Map<String, String> filterProjectOnly(Map<String, String> env) {
         // Scan for used variables (cache the result for performance)

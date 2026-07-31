@@ -22,7 +22,7 @@ This starter is useful for developers who deploy applications across multiple en
 
 ```xml
 <dependency>
-  <groupId>com.skywalker</groupId>
+  <groupId>io.github.skywalker690</groupId>
   <artifactId>spring-boot-starter-env-printer</artifactId>
   <version>1.0.0</version>
 </dependency>
@@ -86,7 +86,7 @@ Returns:
 # Enable or disable the env printer (default: true)
 env.printer.enabled=true
 
-# Enable or disable the HTTP endpoint (default: true)
+# Enable or disable the HTTP endpoint (default: false)
 env.printer.endpoint-enabled=true
 ```
 
@@ -102,8 +102,7 @@ env.printer.project-only=true
 **What does it scan?**
 - `application.properties` and `application.yml` files
 - Finds `${ENV_VAR}` placeholders
-- Detects `@Value("${ENV_VAR}")` annotations
-- Detects `System.getenv("ENV_VAR")` calls
+- Detects `@Value("${ENV_VAR}")` annotations and environment-variable literals in compiled classes (best effort)
 
 **Example:**
 
@@ -146,8 +145,8 @@ env:
 | Property | Type | Default | Description |
 |----------|------|---------|-------------|
 | `env.printer.enabled` | Boolean | `true` | Enable/disable the environment printer. When disabled, no environment variables will be printed at startup and the endpoint will not be available. |
-| `env.printer.endpoint-enabled` | Boolean | `true` | Enable/disable the HTTP endpoint for environment variables. When disabled, only startup logging will occur. |
-| `env.printer.project-only` | Boolean | `false` | Scan project files to show only environment variables actually referenced in configuration files and source code. When enabled, provides the most relevant view of your application's environment. |
+| `env.printer.endpoint-enabled` | Boolean | `false` | Enable/disable the HTTP endpoint for environment variables. Disabled by default to avoid exposing configuration metadata. |
+| `env.printer.project-only` | Boolean | `true` | Scan project files to show only environment variables actually referenced in configuration files and compiled classes. |
 
 ## 📊 Endpoints
 
@@ -218,7 +217,7 @@ Check logs to verify all required variables are set.
 ## 🔒 Security Note
 
 Be careful when exposing environment variables via HTTP endpoints in production. Consider:
-Note: If using Spring Security don't forget about SecurityConfig to permit endpoint 
+The HTTP endpoint is disabled by default. If enabled, protect it with authentication and authorization; `show-values=true` can expose secrets.
 
 - Using `project-only=true` to limit exposure
 - Securing endpoints with authentication
@@ -236,8 +235,8 @@ When `project-only=true`:
 2. **Extracts variable references**:
    - `${VARIABLE_NAME}` placeholders
    - `${VARIABLE_NAME:default}` with defaults
-   - `@Value("${VARIABLE_NAME}")` annotations (limited in compiled code)
-   - `System.getenv("VARIABLE_NAME")` calls (limited in compiled code)
+   - `@Value("${VARIABLE_NAME}")` annotations
+   - Environment-variable literals in compiled classes (best effort)
 
 3. **Filters environment**:
    - Shows only variables found in step 2
@@ -248,7 +247,7 @@ When `project-only=true`:
 
 ## 📄 License
 
-MIT
+Apache License 2.0
 
 ---
 
