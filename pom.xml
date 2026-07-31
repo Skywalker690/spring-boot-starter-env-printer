@@ -7,7 +7,7 @@
     <!--  Maven Central coordinates -->
     <groupId>io.github.skywalker690</groupId>
     <artifactId>spring-boot-starter-env-printer</artifactId>
-    <version>1.0.0</version>
+    <version>2.0.0</version>
     <packaging>jar</packaging>
 
     <!--  Project info -->

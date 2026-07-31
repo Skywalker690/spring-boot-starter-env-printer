@@ -24,7 +24,7 @@ This starter is useful for developers who deploy applications across multiple en
 <dependency>
   <groupId>io.github.skywalker690</groupId>
   <artifactId>spring-boot-starter-env-printer</artifactId>
-  <version>1.0.0</version>
+  <version>2.0.0</version>
 </dependency>
 ```
 
@@ -41,7 +41,7 @@ Or from GitHub via JitPack:
 <dependency>
   <groupId>com.github.Skywalker690</groupId>
   <artifactId>spring-boot-starter-env-printer</artifactId>
-  <version>1.0.0</version>
+  <version>2.0.0</version>
 </dependency>
 ```
 

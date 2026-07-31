@@ -22,14 +22,14 @@ Add the dependency to your `pom.xml`:
 <dependency>
     <groupId>io.github.skywalker690</groupId>
     <artifactId>spring-boot-starter-env-printer</artifactId>
-    <version>1.0.0</version>
+    <version>2.0.0</version>
 </dependency>
 ```
 
 ### Gradle
 
 ```gradle
-implementation 'com.skywalker:spring-boot-starter-env-printer:1.0.0'
+implementation 'io.github.skywalker690:spring-boot-starter-env-printer:2.0.0'
 ```
 
 ### JitPack (Alternative)
@@ -47,7 +47,7 @@ Add JitPack repository:
 <dependency>
     <groupId>com.github.Skywalker690</groupId>
     <artifactId>spring-boot-starter-env-printer</artifactId>
-    <version>1.0.0</version>
+    <version>2.0.0</version>
 </dependency>
 ```
 
@@ -273,7 +273,7 @@ env.printer.project-only=true
 
 ### Issue: Variable names include prefixes
 
-**Solution:** This is automatically handled. If you see prefixes like `env.`, ensure you're using version 1.0.0 or later.
+**Solution:** This is automatically handled in version 2.0.0 and later.
 
 ### Issue: Missing variables in logs
 
@@ -287,7 +287,7 @@ env.printer.project-only=true
 
 ## Version History
 
-### 1.0.0 (Current)
+### 2.0.0 (Current)
 - Initial release
 - Project scanning functionality
 - Actuator-independent endpoint

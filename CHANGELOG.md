@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 
 
+## [2.0.0] - 2026-07-31
+
+### Breaking changes
+- HTTP and Actuator endpoints are disabled by default.
+- Project-only filtering is enabled by default.
+- Environment-variable detection now inspects compiled classes.
+
+### Added
+- Automated tests for environment scanning and endpoint masking.
+- Safer optional Web and Actuator auto-configuration guards.
+
 ## [1.0.0] - 2025-10-28
 
 ### Added
