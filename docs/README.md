@@ -26,7 +26,6 @@ Add the dependency to your `pom.xml`:
 </dependency>
 ```
 
-<<<<<<< HEAD
 ### Gradle
 
 ```gradle
@@ -51,9 +50,6 @@ Add JitPack repository:
     <version>2.0.0</version>
 </dependency>
 ```
-=======
->>>>>>> 6d8366b3c73d369d17a2119b79a134bbd31c2143
-
 ## Quick Start
 
 1. Add the dependency to your Spring Boot project
@@ -73,12 +69,14 @@ Add JitPack repository:
 
 All configuration properties use the prefix `env.printer`:
 
+The environment printer is enabled by default, but HTTP endpoints are disabled by default. Set `env.printer.endpoint-enabled=true` only when the endpoints are secured.
+
 ### Basic Configuration
 
 | Property | Type | Default | Description |
 |----------|------|---------|-------------|
 | `env.printer.enabled` | Boolean | `true` | Enable or disable the env printer |
-| `env.printer.endpoint-enabled` | Boolean | `false` | Enable or disable the HTTP endpoint |
+| `env.printer.endpoint-enabled` | Boolean | `false` | Enable or disable the HTTP endpoints. Disabled by default. |
 | `env.printer.project-only` | Boolean | `true` | Show only variables used in project |
 
 ### Example Configuration
@@ -122,12 +120,12 @@ env.printer.project-only=true
 
 Two endpoints are available for accessing environment variables via HTTP:
 
-#### REST Controller Endpoint (Actuator-Independent)
+#### REST Controller Endpoint (Actuator-Independent, opt-in)
 - **Path:** `/env/env-printer`
 - **Method:** GET
 - **Requires:** Spring Web only (no actuator needed)
 
-#### Actuator Endpoint (Legacy)
+#### Actuator Endpoint (opt-in)
 - **Path:** `/actuator/envprinter`
 - **Method:** GET
 - **Requires:** Spring Boot Actuator
@@ -135,14 +133,14 @@ Two endpoints are available for accessing environment variables via HTTP:
 **Example Response:**
 ```json
 {
-  "DATABASE_URL": "jdbc:postgresql://localhost:5432/mydb",
-  "JAVA_HOME": "/usr/lib/jvm/java-17",
-  "SERVER_PORT": "8080",
-  "API_KEY": null
+  "DATABASE_URL": "",
+  "JAVA_HOME": "",
+  "SERVER_PORT": "",
+  "API_KEY": ""
 }
 ```
 
-Note: Variables with `null` values are detected in your project but not set in the environment.
+By default, endpoint responses show variable names with empty values. Set `env.printer.show-values=true` only when the endpoint is protected and values are safe to expose.
 
 
 
@@ -193,7 +191,7 @@ Automatically trims common prefixes from variable names:
 public class EnvPrinterProperties {
     private boolean enabled = true;
     private boolean endpointEnabled = false;
-    private boolean projectOnly = false;
+    private boolean projectOnly = true;
     
     // Getters and setters...
 }
@@ -303,9 +301,8 @@ env.printer.project-only=true
 ## Version History
 
 ### 2.0.0 (Current)
-- Initial release
-- Project scanning functionality
-- Actuator-independent endpoint
-- OS-specific variable filtering
-- Variable name trimming
-- Enhanced logging with values
+- HTTP and Actuator endpoints disabled by default
+- Project-only filtering enabled by default
+- Compiled-class environment-variable detection
+- Automated tests for scanning and endpoint masking
+- OS-specific variable filtering and variable-name trimming

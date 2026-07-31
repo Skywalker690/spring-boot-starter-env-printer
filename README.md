@@ -4,7 +4,7 @@
 [![GitHub Release](https://img.shields.io/github/v/release/Skywalker690/spring-boot-starter-env-printer)](https://github.com/Skywalker690/spring-boot-starter-env-printer/releases)
 [![Java Version](https://img.shields.io/badge/Java-17%2B-blue.svg)]()
 [![Spring Boot](https://img.shields.io/badge/Spring%20Boot-3.2%2B-brightgreen.svg)]()
-[![License](https://img.shields.io/badge/License-MIT-green.svg)](LICENSE)
+[![License](https://img.shields.io/badge/License-Apache%202.0-green.svg)](LICENSE)
 [![PRs Welcome](https://img.shields.io/badge/PRs-Welcome-blueviolet.svg)](CONTRIBUTING.md)
 [![Stars](https://img.shields.io/github/stars/Skywalker690/spring-boot-starter-env-printer?style=social)](https://github.com/Skywalker690/spring-boot-starter-env-printer/stargazers)
 
@@ -30,9 +30,9 @@ This starter is useful for developers who deploy applications across multiple en
 
 ```xml
 <dependency>
-  <groupId>com.skywalker</groupId>
+  <groupId>io.github.skywalker690</groupId>
   <artifactId>spring-boot-starter-env-printer</artifactId>
-  <version>1.0.0</version>
+  <version>2.0.0</version>
 </dependency>
 ```
 
@@ -49,7 +49,7 @@ Or from GitHub via JitPack:
 <dependency>
   <groupId>com.github.Skywalker690</groupId>
   <artifactId>spring-boot-starter-env-printer</artifactId>
-  <version>1.0.0</version>
+  <version>2.0.0</version>
 </dependency>
 ```
 
@@ -61,13 +61,15 @@ Environment variables will automatically be printed at startup (OS-specific vari
 2025-10-28T14:00:07.184Z  INFO --- [main] com.skywalker.envprinter.EnvPrinter : ===============================
 2025-10-28T14:00:07.184Z  INFO --- [main] com.skywalker.envprinter.EnvPrinter : 🌍 Environment Variables
 2025-10-28T14:00:07.185Z  INFO --- [main] com.skywalker.envprinter.EnvPrinter : ===============================
-2025-10-28T14:00:07.188Z  INFO --- [main] com.skywalker.envprinter.EnvPrinter : DATABASE_URL = jdbc:postgresql://localhost:5432/mydb
-2025-10-28T14:00:07.189Z  INFO --- [main] com.skywalker.envprinter.EnvPrinter : JAVA_HOME = /usr/lib/jvm/java-17
-2025-10-28T14:00:07.190Z  INFO --- [main] com.skywalker.envprinter.EnvPrinter : SERVER_PORT = 8080
+2025-10-28T14:00:07.188Z  INFO --- [main] com.skywalker.envprinter.EnvPrinter : DATABASE_URL
+2025-10-28T14:00:07.189Z  INFO --- [main] com.skywalker.envprinter.EnvPrinter : JAVA_HOME
+2025-10-28T14:00:07.190Z  INFO --- [main] com.skywalker.envprinter.EnvPrinter : SERVER_PORT
 ...
 ```
 
 ### 3️⃣ Access via HTTP Endpoint
+
+Endpoints are disabled by default. Set `env.printer.endpoint-enabled=true` to enable them, and protect them with authentication before exposing them.
 
 ```bash
 # Actuator-independent endpoint (works without Spring Boot Actuator)
@@ -80,9 +82,9 @@ curl http://localhost:8080/actuator/envprinter
 Returns:
 ```json
 {
-  "DATABASE_URL": "jdbc:postgresql://localhost:5432/mydb",
-  "JAVA_HOME": "/usr/lib/jvm/java-17",
-  "SERVER_PORT": "8080"
+  "DATABASE_URL": "",
+  "JAVA_HOME": "",
+  "SERVER_PORT": ""
 }
 ```
 
@@ -158,18 +160,18 @@ env:
 | Property | Type | Default | Description |
 |----------|------|---------|-------------|
 | `env.printer.enabled` | Boolean | `true` | Enable/disable the environment printer. When disabled, no environment variables will be printed at startup and the endpoint will not be available. |
-| `env.printer.endpoint-enabled` | Boolean | `true` | Enable/disable the HTTP endpoint for environment variables. When disabled, only startup logging will occur. |
-| `env.printer.project-only` | Boolean | `false` | Scan project files to show only environment variables actually referenced in configuration files and source code. When enabled, provides the most relevant view of your application's environment. |
+| `env.printer.endpoint-enabled` | Boolean | `false` | Enable/disable the HTTP endpoints. Disabled by default to avoid exposing configuration metadata. |
+| `env.printer.project-only` | Boolean | `true` | Show only variables referenced in configuration files and compiled classes. |
 
 ## 📊 Endpoints
 
-### `/env/env-printer` (REST Controller)
+### `/env/env-printer` (REST Controller, opt-in)
 - **Type**: Standard REST endpoint
 - **Requires**: Spring Web (no actuator needed)
 - **Access**: `GET http://localhost:8080/env/env-printer`
 - **Response**: JSON map of filtered environment variables
 
-### `/actuator/envprinter` (Actuator Endpoint)
+### `/actuator/envprinter` (Actuator Endpoint, opt-in)
 - **Type**: Spring Boot Actuator endpoint
 - **Requires**: Spring Boot Actuator dependency
 - **Access**: `GET http://localhost:8080/actuator/envprinter`
@@ -244,7 +246,7 @@ When `project-only=true`:
 
 ## 📄 License
 
-MIT
+Apache License 2.0
 
 ---
 
