@@ -60,8 +60,8 @@ Add JitPack repository:
 2025-10-28T15:00:00.000Z  INFO --- [main] com.skywalker.envprinter.EnvPrinter : ===============================
 2025-10-28T15:00:00.000Z  INFO --- [main] com.skywalker.envprinter.EnvPrinter : 🌍 Environment Variables
 2025-10-28T15:00:00.000Z  INFO --- [main] com.skywalker.envprinter.EnvPrinter : ===============================
-2025-10-28T15:00:00.000Z  INFO --- [main] com.skywalker.envprinter.EnvPrinter : DATABASE_URL = jdbc:postgresql://localhost:5432/mydb
-2025-10-28T15:00:00.000Z  INFO --- [main] com.skywalker.envprinter.EnvPrinter : JAVA_HOME = /usr/lib/jvm/java-17
+2025-10-28T15:00:00.000Z  INFO --- [main] com.skywalker.envprinter.EnvPrinter : DATABASE_URL
+2025-10-28T15:00:00.000Z  INFO --- [main] com.skywalker.envprinter.EnvPrinter : JAVA_HOME
 ...
 ```
 
@@ -195,6 +195,9 @@ public class EnvPrinterProperties {
     private boolean enabled = true;
     private boolean endpointEnabled = false;
     private boolean projectOnly = true;
+    private boolean showValues = false;
+    private boolean scanCompiledClasses = false;
+    private List<String> scanPackages = new ArrayList<>();
     
     // Getters and setters...
 }
@@ -304,8 +307,15 @@ env.printer.project-only=true
 ## Version History
 
 ### 2.1.0 (Current)
+- Compiled-class scanning is now opt-in and restricted to configured application packages
+- Reduced dependency false positives and startup scanning overhead
+- Thread-safe project-scan caching
+- Complete configuration metadata for all properties
+- Java 17/21 CI, Dependabot, and dependency-convergence checks
+- Auto-configuration integration tests and improved Javadocs
+- Central Publishing Maven plugin upgraded to 0.10.0
+
+### 2.0.0
 - HTTP and Actuator endpoints disabled by default
 - Project-only filtering enabled by default
-- Compiled-class environment-variable detection
-- Automated tests for scanning and endpoint masking
-- OS-specific variable filtering and variable-name trimming
+- Improved compiled-class environment-variable detection

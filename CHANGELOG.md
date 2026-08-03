@@ -3,7 +3,7 @@
 All notable changes to this project will be documented in this file.
 
 
-## [2.1.0] - 2026-07-31
+## [2.1.0] - 2026-08-03
 
 ### Improved
 - Scope compiled-class scanning to explicitly configured application packages.
@@ -59,7 +59,7 @@ All notable changes to this project will be documented in this file.
 ### Documentation
 - Comprehensive README with features, usage, and examples
 - Contributing guidelines (CONTRIBUTING.md)
-- Apache License 2.0 (LICENSE)
+- MIT License (LICENSE at the time of the 1.0.0 release)
 - Complete documentation in docs/ folder
 - Publishing guide for Maven Central and GitHub Packages
 

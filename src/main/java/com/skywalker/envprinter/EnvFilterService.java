@@ -12,8 +12,8 @@ import java.util.stream.Collectors;
 
 /**
  * Service for filtering and retrieving environment variables based on configuration.
- * When project-only mode is enabled, scans the entire project to identify which
- * environment variables are actually used.
+ * When project-only mode is enabled, scans configuration files and optionally
+ * configured application packages to identify which environment variables are used.
  */
 public class EnvFilterService {
 
