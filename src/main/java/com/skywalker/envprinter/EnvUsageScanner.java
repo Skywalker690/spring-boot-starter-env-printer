@@ -13,14 +13,16 @@ import org.springframework.core.io.support.PathMatchingResourcePatternResolver;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.util.Collections;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 /**
  * Service that scans project files to identify environment variables actually used in the application.
- * Scans configuration files (application.properties, application.yml) and Java source files
+ * Scans configuration files and, when explicitly configured, application compiled classes
  * for environment variable references.
  */
 public class EnvUsageScanner {
@@ -37,6 +39,23 @@ public class EnvUsageScanner {
     private static final Pattern VALUE_ANNOTATION_PATTERN = Pattern.compile("@Value\\([\"']\\$\\{([^}:]+)(?::[^}]*)?\\}[\"']\\)");
 
     private final PathMatchingResourcePatternResolver resolver = new PathMatchingResourcePatternResolver();
+    private final EnvPrinterProperties properties;
+
+    /**
+     * Creates a scanner using default properties.
+     */
+    public EnvUsageScanner() {
+        this(new EnvPrinterProperties());
+    }
+
+    /**
+     * Creates a scanner with the supplied configuration.
+     *
+     * @param properties scanner configuration
+     */
+    public EnvUsageScanner(EnvPrinterProperties properties) {
+        this.properties = properties;
+    }
 
     /**
      * Scans the project to find all environment variables that are actually referenced.
@@ -56,7 +75,9 @@ public class EnvUsageScanner {
             
             // Scan compiled application classes. Source files are normally not available
             // in a deployed application, so inspect class-file string constants instead.
-            scanClassFiles(usedVars);
+            if (properties.isScanCompiledClasses()) {
+                scanClassFiles(usedVars, properties.getScanPackages());
+            }
             
             logger.debug("Found {} environment variables in use across the project", usedVars.size());
             
@@ -64,7 +85,7 @@ public class EnvUsageScanner {
             logger.warn("Error scanning project for environment variable usage: {}", e.getMessage());
         }
         
-        return usedVars;
+        return Collections.unmodifiableSet(new HashSet<>(usedVars));
     }
 
     /**
@@ -86,16 +107,27 @@ public class EnvUsageScanner {
     /**
      * Scans compiled classes for System.getenv() calls and @Value annotations.
      */
-    private void scanClassFiles(Set<String> usedVars) {
+    private void scanClassFiles(Set<String> usedVars, List<String> scanPackages) {
+        if (scanPackages == null || scanPackages.isEmpty()) {
+            logger.debug("Compiled-class scanning is enabled but no scan packages are configured");
+            return;
+        }
         try {
-            Resource[] resources = resolver.getResources("classpath*:**/*.class");
-            for (Resource resource : resources) {
-                if (resource.exists() && resource.isReadable()) {
-                    byte[] classBytes;
-                    try (var inputStream = resource.getInputStream()) {
-                        classBytes = inputStream.readAllBytes();
+            for (String scanPackage : scanPackages) {
+                String normalizedPackage = scanPackage == null ? "" : scanPackage.trim();
+                if (normalizedPackage.isEmpty()) {
+                    continue;
+                }
+                String locationPattern = "classpath*:" + normalizedPackage.replace('.', '/') + "/**/*.class";
+                Resource[] resources = resolver.getResources(locationPattern);
+                for (Resource resource : resources) {
+                    if (resource.exists() && resource.isReadable()) {
+                        byte[] classBytes;
+                        try (var inputStream = resource.getInputStream()) {
+                            classBytes = inputStream.readAllBytes();
+                        }
+                        scanClass(classBytes, usedVars);
                     }
-                    scanClass(classBytes, usedVars);
                 }
             }
         } catch (IOException e) {
@@ -149,16 +181,6 @@ public class EnvUsageScanner {
         String varName = trimEnvVarName(value.trim());
         if (isLikelyEnvVar(varName)) {
             usedVars.add(varName);
-        }
-    }
-
-    private void extractMatches(String content, Pattern pattern, Set<String> usedVars) {
-        Matcher matcher = pattern.matcher(content);
-        while (matcher.find()) {
-            String varName = trimEnvVarName((matcher.groupCount() > 0 ? matcher.group(1) : matcher.group()).trim());
-            if (isLikelyEnvVar(varName)) {
-                usedVars.add(varName);
-            }
         }
     }
 

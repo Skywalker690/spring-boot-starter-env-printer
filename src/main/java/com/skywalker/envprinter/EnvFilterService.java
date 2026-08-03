@@ -52,8 +52,14 @@ public class EnvFilterService {
 
     private final EnvPrinterProperties properties;
     private final EnvUsageScanner scanner;
-    private Set<String> cachedUsedVars = null;
+    private volatile Set<String> cachedUsedVars;
 
+    /**
+     * Creates a filtering service.
+     *
+     * @param properties filtering configuration
+     * @param scanner environment usage scanner
+     */
     public EnvFilterService(EnvPrinterProperties properties, EnvUsageScanner scanner) {
         this.properties = properties;
         this.scanner = scanner;
@@ -103,39 +109,38 @@ public class EnvFilterService {
      */
     private Map<String, String> filterProjectOnly(Map<String, String> env) {
         // Scan for used variables (cache the result for performance)
-        if (cachedUsedVars == null) {
-            logger.info("Scanning project for environment variable usage...");
-            cachedUsedVars = scanner.scanForUsedEnvVariables();
+        Set<String> usedVars = cachedUsedVars;
+        if (usedVars == null) {
+            synchronized (this) {
+                usedVars = cachedUsedVars;
+                if (usedVars == null) {
+                    logger.info("Scanning project for environment variable usage...");
+                    usedVars = scanner.scanForUsedEnvVariables();
+                    cachedUsedVars = usedVars;
             
-            // Log the detected environment variables
-            if (cachedUsedVars.isEmpty()) {
-                logger.info("No environment variables detected in project");
-            } else {
-                if (properties.isShowValues()) {
-                    // Build a formatted string with name=value pairs
-                    String detectedVarsWithValues = cachedUsedVars.stream()
-                            .sorted()
-                            .map(varName -> {
-                                String value = env.get(varName);
-                                if (value != null) {
-                                    return varName + "=" + value;
-                                } else {
-                                    return varName + "=<not set>";
-                                }
-                            })
-                            .collect(Collectors.joining(", "));
-                    logger.info("Detected environment variables: {}", detectedVarsWithValues);
+                    // Log the detected environment variables
+                    if (usedVars.isEmpty()) {
+                        logger.info("No environment variables detected in project");
+                    } else if (properties.isShowValues()) {
+                        String detectedVarsWithValues = usedVars.stream()
+                                .sorted()
+                                .map(varName -> {
+                                    String value = env.get(varName);
+                                    return value == null ? varName + "=<not set>" : varName + "=" + value;
+                                })
+                                .collect(Collectors.joining(", "));
+                        logger.info("Detected environment variables: {}", detectedVarsWithValues);
+                    } else {
+                        String detectedVarNames = usedVars.stream()
+                                .sorted()
+                                .collect(Collectors.joining(", "));
+                        logger.info("Detected environment variables: {}", detectedVarNames);
+                    }
                 } else {
-                    // Show only names
-                    String detectedVarNames = cachedUsedVars.stream()
-                            .sorted()
-                            .collect(Collectors.joining(", "));
-                    logger.info("Detected environment variables: {}", detectedVarNames);
+                    usedVars = cachedUsedVars;
                 }
             }
         }
-        
-        final Set<String> usedVars = cachedUsedVars;
         
         // Build result map including both set and unset variables
         Map<String, String> result = new TreeMap<>();

@@ -80,9 +80,9 @@ Create a test Spring Boot application:
 Add to your test project's `pom.xml`:
 ```xml
 <dependency>
-    <groupId>com.skywalker</groupId>
+    <groupId>io.github.skywalker690</groupId>
     <artifactId>spring-boot-starter-env-printer</artifactId>
-    <version>2.0.0</version>
+    <version>2.1.0</version>
 </dependency>
 ```
 
@@ -96,7 +96,7 @@ Add to your test project's `pom.xml`:
 
 ## License
 
-By contributing, you agree that your contributions will be licensed under the MIT License.
+By contributing, you agree that your contributions will be licensed under the Apache License 2.0.
 
 ## Questions?
 

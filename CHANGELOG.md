@@ -3,6 +3,19 @@
 All notable changes to this project will be documented in this file.
 
 
+## [2.1.0] - 2026-07-31
+
+### Improved
+- Scope compiled-class scanning to explicitly configured application packages.
+- Disable compiled-class scanning by default to avoid dependency false positives and startup overhead.
+- Make project-scan caching thread-safe.
+- Add configuration metadata for scanner and value-display properties.
+- Upgrade the Central Publishing Maven plugin to 0.10.0.
+
+### Added
+- Java 17/21 CI workflow and Dependabot configuration.
+- Auto-configuration integration tests and dependency-convergence enforcement.
+
 ## [2.0.0] - 2026-07-31
 
 ### Breaking changes
@@ -46,7 +59,7 @@ All notable changes to this project will be documented in this file.
 ### Documentation
 - Comprehensive README with features, usage, and examples
 - Contributing guidelines (CONTRIBUTING.md)
-- MIT License (LICENSE)
+- Apache License 2.0 (LICENSE)
 - Complete documentation in docs/ folder
 - Publishing guide for Maven Central and GitHub Packages
 

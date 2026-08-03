@@ -22,14 +22,14 @@ Add the dependency to your `pom.xml`:
 <dependency>
     <groupId>io.github.skywalker690</groupId>
     <artifactId>spring-boot-starter-env-printer</artifactId>
-    <version>2.0.0</version>
+    <version>2.1.0</version>
 </dependency>
 ```
 
 ### Gradle
 
 ```gradle
-implementation 'io.github.skywalker690:spring-boot-starter-env-printer:2.0.0'
+implementation 'io.github.skywalker690:spring-boot-starter-env-printer:2.1.0'
 ```
 
 ### JitPack (Alternative)
@@ -47,7 +47,7 @@ Add JitPack repository:
 <dependency>
     <groupId>com.github.Skywalker690</groupId>
     <artifactId>spring-boot-starter-env-printer</artifactId>
-    <version>2.0.0</version>
+    <version>2.1.0</version>
 </dependency>
 ```
 ## Quick Start
@@ -78,6 +78,9 @@ The environment printer is enabled by default, but HTTP endpoints are disabled b
 | `env.printer.enabled` | Boolean | `true` | Enable or disable the env printer |
 | `env.printer.endpoint-enabled` | Boolean | `false` | Enable or disable the HTTP endpoints. Disabled by default. |
 | `env.printer.project-only` | Boolean | `true` | Show only variables used in project |
+| `env.printer.show-values` | Boolean | `false` | Show values instead of names only; values may contain secrets |
+| `env.printer.scan-compiled-classes` | Boolean | `false` | Enable package-scoped compiled-class scanning |
+| `env.printer.scan-packages` | List | empty | Application package prefixes to scan |
 
 ### Example Configuration
 
@@ -109,7 +112,7 @@ When enabled, scans your project files to identify which environment variables a
 
 - Scans `application.properties` and `application.yml`
 - Detects `${ENV_VAR}` placeholders
-- Detects `@Value("${ENV_VAR}")` annotations and environment-variable literals in compiled classes (best effort)
+- Optionally detects `@Value("${ENV_VAR}")` and `System.getenv("ENV_VAR")` in configured compiled application packages
 
 **Configuration:**
 ```properties
@@ -300,7 +303,7 @@ env.printer.project-only=true
 
 ## Version History
 
-### 2.0.0 (Current)
+### 2.1.0 (Current)
 - HTTP and Actuator endpoints disabled by default
 - Project-only filtering enabled by default
 - Compiled-class environment-variable detection

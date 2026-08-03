@@ -16,11 +16,20 @@ public class EnvPrinter {
     private final EnvFilterService filterService;
     private final EnvPrinterProperties properties;
 
+    /**
+     * Creates the startup environment printer.
+     *
+     * @param filterService environment filtering service
+     * @param properties printer configuration
+     */
     public EnvPrinter(EnvFilterService filterService, EnvPrinterProperties properties) {
         this.filterService = filterService;
         this.properties = properties;
     }
 
+    /**
+     * Logs the configured environment view after application initialization.
+     */
     @PostConstruct
     public void printEnv() {
         logger.info("===============================");

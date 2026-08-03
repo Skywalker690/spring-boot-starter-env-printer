@@ -18,14 +18,21 @@ import org.springframework.context.annotation.Bean;
 public class EnvPrinterAutoConfiguration {
 
     /**
+     * Creates the auto-configuration definition.
+     */
+    public EnvPrinterAutoConfiguration() {
+    }
+
+    /**
      * Creates the environment usage scanner that scans project files
      * to identify which environment variables are actually used.
      *
+     * @param properties scanner configuration
      * @return the EnvUsageScanner instance
      */
     @Bean
-    public EnvUsageScanner envUsageScanner() {
-        return new EnvUsageScanner();
+    public EnvUsageScanner envUsageScanner(EnvPrinterProperties properties) {
+        return new EnvUsageScanner(properties);
     }
 
     /**

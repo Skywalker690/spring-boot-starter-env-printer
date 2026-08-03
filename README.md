@@ -17,7 +17,7 @@ This starter is useful for developers who deploy applications across multiple en
 - 🚀 **Auto-prints environment variables** at application startup with proper SLF4J logging
 - 🌐 **Actuator-independent HTTP endpoint** at `/env/env-printer` - no actuator dependency required
 - 🔍 **Optional actuator endpoint** at `/actuator/envprinter` when actuator is present
-- 🎯 **Smart project-only mode** - scans your entire project to show only environment variables actually used
+- 🎯 **Smart project-only mode** - scans configuration and optionally configured application packages
 - 🚫 **Hardcoded OS exclusions** - automatically hides 50+ common OS-specific variables (APPDATA, TEMP, etc.)
 - ⚙️ **Highly configurable** via `application.properties` or `application.yml`
 - 📦 **Zero configuration required** - works out of the box with sensible defaults
@@ -32,7 +32,7 @@ This starter is useful for developers who deploy applications across multiple en
 <dependency>
   <groupId>io.github.skywalker690</groupId>
   <artifactId>spring-boot-starter-env-printer</artifactId>
-  <version>2.0.0</version>
+  <version>2.1.0</version>
 </dependency>
 ```
 
@@ -49,7 +49,7 @@ Or from GitHub via JitPack:
 <dependency>
   <groupId>com.github.Skywalker690</groupId>
   <artifactId>spring-boot-starter-env-printer</artifactId>
-  <version>2.0.0</version>
+  <version>2.1.0</version>
 </dependency>
 ```
 
@@ -102,7 +102,7 @@ env.printer.endpoint-enabled=true
 
 ### 🎯 Project-Only Mode (Show Only Variables Used in Your Project)
 
-Enable project-only mode to scan your entire project and show only environment variables that are actually referenced:
+Project-only mode shows only environment variables referenced in configuration files and, when enabled, configured application packages:
 
 ```properties
 # Scan project files and show only used environment variables
@@ -112,7 +112,7 @@ env.printer.project-only=true
 **What does it scan?**
 - `application.properties` and `application.yml` files
 - Finds `${ENV_VAR}` placeholders
-- Detects `@Value("${ENV_VAR}")` annotations and environment-variable literals in compiled classes (best effort)
+- Optionally detects `@Value("${ENV_VAR}")` and `System.getenv("ENV_VAR")` in configured compiled application packages
 
 **Example:**
 
@@ -161,7 +161,10 @@ env:
 |----------|------|---------|-------------|
 | `env.printer.enabled` | Boolean | `true` | Enable/disable the environment printer. When disabled, no environment variables will be printed at startup and the endpoint will not be available. |
 | `env.printer.endpoint-enabled` | Boolean | `false` | Enable/disable the HTTP endpoints. Disabled by default to avoid exposing configuration metadata. |
-| `env.printer.project-only` | Boolean | `true` | Show only variables referenced in configuration files and compiled classes. |
+| `env.printer.project-only` | Boolean | `true` | Show only variables referenced in configuration files and optionally scanned compiled classes. |
+| `env.printer.show-values` | Boolean | `false` | Show values instead of names only. Values may contain secrets. |
+| `env.printer.scan-compiled-classes` | Boolean | `false` | Enable compiled-class scanning. Configure `scan-packages` when enabling. |
+| `env.printer.scan-packages` | List | empty | Application package prefixes to scan, such as `com.example.myapp`. |
 
 ## 📊 Endpoints
 
@@ -233,7 +236,7 @@ When `project-only=true`:
    - `${VARIABLE_NAME}` placeholders
    - `${VARIABLE_NAME:default}` with defaults
    - `@Value("${VARIABLE_NAME}")` annotations
-   - Environment-variable literals in compiled classes (best effort)
+   - `System.getenv("VARIABLE_NAME")` calls in configured compiled classes
 
 3. **Filters environment**:
    - Shows only variables found in step 2
@@ -241,6 +244,16 @@ When `project-only=true`:
    - Returns sorted alphabetically
 
 **Performance:** Scanning happens once at startup and results are cached.
+
+Compiled-class scanning is disabled by default. To enable it safely, configure narrow application packages:
+
+```yaml
+env:
+  printer:
+    scan-compiled-classes: true
+    scan-packages:
+      - com.example.myapp
+```
 
 ---
 

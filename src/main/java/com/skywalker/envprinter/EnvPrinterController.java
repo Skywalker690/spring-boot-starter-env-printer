@@ -23,6 +23,11 @@ public class EnvPrinterController {
 
     private final EnvFilterService filterService;
 
+    /**
+     * Creates the REST endpoint controller.
+     *
+     * @param filterService environment filtering service
+     */
     public EnvPrinterController(EnvFilterService filterService) {
         this.filterService = filterService;
     }

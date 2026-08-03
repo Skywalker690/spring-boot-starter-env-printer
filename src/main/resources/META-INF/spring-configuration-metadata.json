@@ -26,8 +26,28 @@
       "name": "env.printer.project-only",
       "type": "java.lang.Boolean",
       "sourceType": "com.skywalker.envprinter.EnvPrinterProperties",
-      "description": "Filter to show only environment variables actually used in the project. When enabled, scans configuration files and compiled classes to identify referenced variables, and displays only those variables.",
+      "description": "Filter to show only environment variables actually used in the project. When enabled, scans configuration files and optionally configured compiled classes, and displays only those variables.",
       "defaultValue": true
+    },
+    {
+      "name": "env.printer.show-values",
+      "type": "java.lang.Boolean",
+      "sourceType": "com.skywalker.envprinter.EnvPrinterProperties",
+      "description": "Show environment variable values instead of names only. Use with care because values may contain secrets.",
+      "defaultValue": false
+    },
+    {
+      "name": "env.printer.scan-compiled-classes",
+      "type": "java.lang.Boolean",
+      "sourceType": "com.skywalker.envprinter.EnvPrinterProperties",
+      "description": "Scan configured application packages in compiled classes for @Value and System.getenv references.",
+      "defaultValue": false
+    },
+    {
+      "name": "env.printer.scan-packages",
+      "type": "java.util.List<java.lang.String>",
+      "sourceType": "com.skywalker.envprinter.EnvPrinterProperties",
+      "description": "Application package prefixes to scan when compiled-class scanning is enabled."
     }
   ]
 }

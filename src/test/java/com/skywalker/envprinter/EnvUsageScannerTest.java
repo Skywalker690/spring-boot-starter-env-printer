@@ -15,4 +15,19 @@ class EnvUsageScannerTest {
         assertTrue(variables.contains("TEST_DATABASE_URL"));
         assertTrue(variables.contains("TEST_API_KEY"));
     }
+
+    @Test
+    void scansOnlyConfiguredPackagesWhenCompiledScanningIsEnabled() {
+        EnvPrinterProperties properties = new EnvPrinterProperties();
+        properties.setScanCompiledClasses(true);
+        properties.setScanPackages(java.util.List.of("com.skywalker.envprinter"));
+
+        Set<String> variables = new EnvUsageScanner(properties).scanForUsedEnvVariables();
+
+        assertTrue(variables.contains("COMPILED_ENV_KEY"));
+    }
+
+    static String compiledEnvironmentReference() {
+        return System.getenv("COMPILED_ENV_KEY");
+    }
 }

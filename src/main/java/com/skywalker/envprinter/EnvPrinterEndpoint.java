@@ -21,6 +21,11 @@ public class EnvPrinterEndpoint {
 
     private final EnvFilterService filterService;
 
+    /**
+     * Creates the Actuator endpoint.
+     *
+     * @param filterService environment filtering service
+     */
     public EnvPrinterEndpoint(EnvFilterService filterService) {
         this.filterService = filterService;
     }
